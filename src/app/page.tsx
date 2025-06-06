@@ -10,7 +10,12 @@ export default async function Home() {
     <main>
       <div>
         Olá {user?.firstName}! Bem vindo ao Sistema de gerenciamento de
-        atividades empresariais mandakaru! deseja completar seu cadastro? <br />
+        atividades empresariais mandakaru!
+        {!user?.emailAddresses && (
+          <p>
+            deseja completar seu cadastro? <br />
+          </p>
+        )}
       </div>
     </main>
   );
