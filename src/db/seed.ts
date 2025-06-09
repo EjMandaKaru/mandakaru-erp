@@ -3,7 +3,9 @@ import { db } from ".";
 import data from "./members";
 
 async function insert() {
-  for (const member of data) {
+  // for (const member of data) {
+  for (let i = 0; i < 50; i++) {
+    const member = data[i];
     console.log("Adicionado " + member.name + " com cargo: " + member.cargo);
     await db.insert(users).values({
       name: member.name,

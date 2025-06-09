@@ -1,15 +1,15 @@
 import { Imember } from "@/interfaces";
 
 const data: Imember[] = [
-  {
-    "name": "Wellyton Barbosa Galdino",
-    "cargo": "Não Atribuído",
-    "matricula": "202114560025",
-    "curso": "Informática",
-    "telefone": "83 996872122",
-    "email": "welly.tohn@gmail.com",
-    "status": "pendente"
-  },
+  // {
+  //   "name": "Wellyton Barbosa Galdino",
+  //   "cargo": "Não Atribuído",
+  //   "matricula": "202114560025",
+  //   "curso": "Informática",
+  //   "telefone": "83 996872122",
+  //   "email": "welly.tohn@gmail.com",
+  //   "status": "pendente"
+  // },
   {
     "name": "Julia das Neves",
     "cargo": "Presidente",
