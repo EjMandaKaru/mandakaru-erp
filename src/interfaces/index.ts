@@ -48,6 +48,7 @@ export interface InavList {
 export interface IformInput {
   label: string;
   id: string;
+  errors?: string;
   placeholder?: string;
   className?: string;
 }
@@ -55,5 +56,5 @@ export interface IformInput {
 export interface IformBtn {
   children: ReactNode;
   className?: string;
+  disabled?: boolean;
 }
-

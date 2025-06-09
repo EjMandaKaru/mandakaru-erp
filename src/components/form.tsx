@@ -1,19 +1,28 @@
 import { IformInput, IformBtn } from "@/interfaces";
 
-export function Input(props: IformInput) {
+export function Input({
+  label,
+  id,
+  className = "",
+  placeholder,
+  errors,
+  ...rest
+}: IformInput) {
   return (
     <fieldset className="fieldset">
-      <label htmlFor={props.id} className="fildset-legend mt-2">
-        {props.label}
+      <label htmlFor={id} className="fildset-legend mt-2">
+        {label}
       </label>
       <input
         type="text"
-        id={props.id}
-        name={props.id}
-        className={props.className + " input mt-2 w-full"}
-        placeholder={props.placeholder}
-        required
+        id={id}
+        name={id}
+        className={className + " input mt-2 w-full"}
+        placeholder={placeholder}
+        // required
+        {...rest}
       />
+      {errors && <p className="text-red-500 text-sm mt-1">{errors}</p>}
     </fieldset>
   );
 }
@@ -29,7 +38,7 @@ export function File(props: IformInput) {
         id={props.id}
         name={props.id}
         className="file-input"
-        required
+        // required
       />
       <label className="label mb-2">{props.placeholder}</label>
     </fieldset>
