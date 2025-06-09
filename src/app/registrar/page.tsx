@@ -11,7 +11,7 @@ const phoneRegex = new RegExp(
 );
 
 const schema = z.object({
-  nome: z
+  name: z
     .string()
     .min(3, {
       message: "O nome deve conter no mínimo 3 e no máximo 100 caractéres!",
@@ -35,6 +35,21 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
+async function onSubmit(data: FormData) {
+  try {
+    await addMember({
+      ...data,
+      cargo: "Não Atribuído",
+      status: "pendente",
+    });
+
+    alert("Cadastro realizado com sucesso!");
+  } catch (err) {
+    alert("Erro ao enviar formulário.");
+    console.error(err);
+  }
+}
+
 export default function Register() {
   const {
     handleSubmit,
@@ -49,8 +64,7 @@ export default function Register() {
   return (
     <div className="h-[80vh] flex items-center justify-center">
       <form
-        onSubmit={handleSubmit((data) => console.log(data))}
-        action={addMember}
+        onSubmit={handleSubmit(onSubmit)}
         className="overflow-auto max-h-full max-w-sm lg:min-w-200 mt-5 mx-auto border-base-300 rounded-box w-xs border shadow-2xl p-4"
       >
         <h1>Completar cadastro</h1>
@@ -58,8 +72,8 @@ export default function Register() {
           label="Nome completo"
           id="nome"
           placeholder="Exemplo: fulano da silva souza"
-          {...register("nome")}
-          errors={errors.nome?.message}
+          {...register("name")}
+          errors={errors.name?.message}
         />
 
         <Input

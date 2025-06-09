@@ -5,17 +5,8 @@ import { Imember } from "@/interfaces";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
-export async function addMember(formData: FormData) {
+export async function addMember(data: Imember) {
   "use server";
-  const data: Imember = {
-    name: String(formData.get("nome")),
-    cargo: "Não Atribuído",
-    matricula: String(formData.get("matricula")),
-    curso: String(formData.get("curso")),
-    telefone: String(formData.get("telefone")),
-    email: String(formData.get("email")),
-    status: "pendente",
-  };
 
   await db.insert(users).values({
     name: data.name,
@@ -26,19 +17,11 @@ export async function addMember(formData: FormData) {
     email: data.email,
     status: data.status,
   });
+  revalidatePath("/");
 }
 
-export async function updateMember(formData: FormData) {
+export async function updateMember(data: Imember) {
   "use server";
-  const data: Imember = {
-    name: String(formData.get("nome")),
-    cargo: "Não Atribuído",
-    matricula: String(formData.get("matricula")),
-    curso: String(formData.get("curso")),
-    telefone: String(formData.get("telefone")),
-    email: String(formData.get("email")),
-    status: "pendente",
-  };
 
   await db.insert(users).values({
     name: data.name,
