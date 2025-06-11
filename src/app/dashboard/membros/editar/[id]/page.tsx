@@ -1,13 +1,13 @@
 import { EditarUsuário } from "@/components/form";
 import { getMember } from "@/app/actions";
-import { Imember } from "@/interfaces";
 
-interface PageProps {
-  params: { id: string };
+export interface PageProps {
+  params: Promise<{ id: string }>;
 }
 
 export default async function Editar({ params }: PageProps) {
-  const member: Imember = await getMember(params.id);
+  const { id } = await params;
+  const member = await getMember(id);
   if (!member) {
     return <p>Membro não encontrado</p>;
   }
