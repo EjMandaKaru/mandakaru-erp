@@ -33,6 +33,20 @@ export async function addMember(
       };
     }
 
+    const isValidRegistration = await db
+      .select()
+      .from(listaDeEspera)
+      .where(eq(listaDeEspera.matricula, userData.data.matricula));
+    if (isValidRegistration.length === 0) {
+      return {
+        success: false,
+        message: "Matrícula não encontrada na lista de espera.",
+        errors: {
+          matricula: ["Essa matrícula não está na lista de espera."],
+        },
+        inputs: rawData,
+      };
+    }
     await db.insert(users).values({
       name: userData.data.name,
       cargo: String(userData.data.cargo),
@@ -55,20 +69,61 @@ export async function addMember(
   }
 }
 
-export async function updateMember(data: Imember) {
-  "use server";
-
-  await db.insert(users).values({
-    name: data.name,
-    cargo: String(data.cargo),
-    matricula: data.matricula,
-    curso: data.curso,
-    telefone: data.telefone,
-    email: data.email,
-    status: data.status,
-  });
+export async function getMember(userId: string) {
+  const result = await db.select().from(users).where(eq(users.id, userId));
+  return result[0] ?? null;
 }
 
+export async function updateMember(
+  prevState: ActionResponse | null,
+  formData: FormData
+): Promise<ActionResponse> {
+  try {
+    const rawData: Imember = {
+      id: String(formData.get("id")), // precisa desse campo oculto no form
+      name: String(formData.get("name")),
+      cargo: String(formData.get("cargo")),
+      matricula: String(formData.get("matricula")),
+      curso: String(formData.get("curso")),
+      telefone: String(formData.get("telefone")),
+      email: String(formData.get("email")),
+      status: String(formData.get("status")) || "pendente",
+    };
+
+    const userData = memberSchema.safeParse(rawData);
+    if (!userData.success) {
+      return {
+        success: false,
+        message: "",
+        errors: userData.error.flatten().fieldErrors,
+        inputs: rawData,
+      };
+    }
+
+    await db
+      .update(users)
+      .set({
+        name: userData.data.name,
+        cargo: userData.data.cargo,
+        matricula: userData.data.matricula,
+        curso: userData.data.curso,
+        telefone: userData.data.telefone,
+        email: userData.data.email,
+      })
+      .where(eq(users.id, String(userData.data.id)));
+    revalidatePath("/");
+    return {
+      success: true,
+      message: "Dados atualizados com sucesso!",
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      success: false,
+      message: "Erro inesperado ao atualizar dados.",
+    };
+  }
+}
 export async function addMemberToQueue(formData: FormData) {
   const matricula = String(formData.get("matricula"));
   console.log(matricula);
