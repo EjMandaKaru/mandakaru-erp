@@ -8,7 +8,7 @@ import {
 } from "@/components/table";
 // import Image from "next/image";
 
-export default async function Registro() {
+export default async function Membros() {
   "use server";
   const membrosEfetivos = await db
     .select()

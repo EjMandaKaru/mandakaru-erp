@@ -1,10 +1,11 @@
-import { z } from "zod/v4";
+import { string, z } from "zod/v4";
 
 export const phoneRegex = new RegExp(
   /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/
 );
 
 export const memberSchema = z.object({
+  id: string().optional(),
   name: z
     .string()
     .min(3, {

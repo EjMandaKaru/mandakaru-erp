@@ -48,6 +48,7 @@ export interface InavList {
 export interface IformInput {
   label: string;
   id: string;
+  defaultValue?: string;
   errors?: string;
   placeholder?: string;
   className?: string;

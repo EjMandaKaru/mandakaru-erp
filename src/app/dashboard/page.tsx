@@ -11,5 +11,8 @@ export default async function dashboard() {
   console.log(user);
   // if (user.length === 0) return <div>Acesso negado!</div>;
   if (!userId) throw new Error("User not found");
-  return <div>Dashboard page</div>;
+  return(
+    <div>Dashboard page</div>
+  )
+
 }
