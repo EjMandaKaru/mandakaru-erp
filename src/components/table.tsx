@@ -1,14 +1,25 @@
 import { Imember, ImemberTable } from "@/interfaces";
 import {
-  ModalDetails,
-  ModalArquivedDetails,
-  AddMemberModal,
-  ModalPendingDetails,
+  ActiveBtn,
+  ArquiveBtn,
+  DeleteBtn,
+  EditBtn,
+  Modal,
+  RemoveBtn,
 } from "./modal";
 import React, { ReactNode } from "react";
+import { UserCog, UserPlus } from "lucide-react";
+import {
+  activeMember,
+  addMemberToQueue,
+  arquiveMember,
+  deleteMember,
+  pendingMember,
+} from "@/app/actions";
 
 type ITableHead = {
   id: string | number;
+  children?: ReactNode;
 };
 
 type ITableBody = {
@@ -27,9 +38,7 @@ export function TableHead(props: ITableHead) {
         <th>Nome</th>
         <th>Cargo</th>
         <th>Matricula</th>
-        <th>
-          <AddMemberModal />
-        </th>
+        {props.children}
       </tr>
     </thead>
   );
@@ -126,7 +135,32 @@ export function MemberTableSection({
 }) {
   return (
     <Table title={title}>
-      <TableHead id={title} />
+      <TableHead id={title}>
+        <th>
+          <Modal name="add_member" trigger={<UserPlus></UserPlus>}>
+            <form action={addMemberToQueue}>
+              <label
+                htmlFor="matricula"
+                className="block text-lg font-bold mb-2"
+              >
+                Adicionar membro
+              </label>
+
+              <input
+                type="text"
+                id="matricula"
+                name="matricula"
+                placeholder="Matícula"
+                className="input m-2"
+                required
+              />
+              <button type="submit" className="btn btn-success text-2x m-2">
+                Enviar
+              </button>
+            </form>
+          </Modal>
+        </th>
+      </TableHead>
       <TableBody>
         {members.map((member) => (
           <tr key={member.id}>
@@ -155,16 +189,45 @@ export function MemberTableSection({
             <td>{member.cargo}</td>
             <td>{member.matricula}</td>
             <th>
-              <ModalDetails
-                id={member.id}
-                name={member.name}
-                matricula={member.matricula}
-                curso={member.curso}
-                email={member.email}
-                status={member.status}
-                telefone={member.telefone}
-                cargo={member.cargo}
-              />
+              <Modal name="details" trigger={<UserCog />}>
+                <div>
+                  <h2 className="block text-lg font-bold mb-2">
+                    {member.name}
+                  </h2>
+                  <p className="block text-white mb-2">
+                    <span className="text-gray-400">Status: </span>
+                    {member.status}
+                  </p>
+                  <p className="block text-white mb-2">
+                    <span className="text-gray-400">Id: </span>
+                    {member.id}
+                  </p>
+                  <p className="block text-white mb-2">
+                    <span className="text-gray-400">Cargo: </span>
+                    {member.cargo}
+                  </p>
+                  <p className="block text-white mb-2">
+                    <span className="text-gray-400">Matricula: </span>
+                    {member.matricula}
+                  </p>
+                  <p className="block text-white mb-2">
+                    <span className="text-gray-400">Curso: </span>
+                    {member.curso}
+                  </p>
+                  <p className="block text-white mb-2">
+                    <span className="text-gray-400">Email: </span>
+                    {member.email}
+                  </p>
+                  <p className="block text-white mb-2">
+                    <span className="text-gray-400">Telefone: </span>
+                    {member.telefone}
+                  </p>
+                  <EditBtn id={member.id}></EditBtn>
+                  <form action={arquiveMember} className="inline">
+                    <ArquiveBtn id={member.id} />
+                  </form>
+                </div>
+              </Modal>
             </th>
           </tr>
         ))}
@@ -212,16 +275,47 @@ export function ArquivedTableSection({
             <td>{member.cargo}</td>
             <td>{member.matricula}</td>
             <th>
-              <ModalArquivedDetails
-                id={member.id}
-                name={member.name}
-                matricula={member.matricula}
-                curso={member.curso}
-                email={member.email}
-                status={member.status}
-                telefone={member.telefone}
-                cargo={member.cargo}
-              />
+              <Modal name="arquivedDetails" trigger={<UserCog />}>
+                <div>
+                  <h2 className="block text-lg font-bold mb-2">
+                    {member.name}
+                  </h2>
+                  <p className="block text-white mb-2">
+                    <span className="text-gray-400">Status: </span>
+                    {member.status}
+                  </p>
+                  <p className="block text-white mb-2">
+                    <span className="text-gray-400">Id: </span>
+                    {member.id}
+                  </p>
+                  <p className="block text-white mb-2">
+                    <span className="text-gray-400">Cargo: </span>
+                    {member.cargo}
+                  </p>
+                  <p className="block text-white mb-2">
+                    <span className="text-gray-400">Matricula: </span>
+                    {member.matricula}
+                  </p>
+                  <p className="block text-white mb-2">
+                    <span className="text-gray-400">Curso: </span>
+                    {member.curso}
+                  </p>
+                  <p className="block text-white mb-2">
+                    <span className="text-gray-400">Email: </span>
+                    {member.email}
+                  </p>
+                  <p className="block text-white mb-2">
+                    <span className="text-gray-400">Telefone: </span>
+                    {member.telefone}
+                  </p>
+                  <form action={pendingMember} className="inline">
+                    <RemoveBtn id={member.id} />
+                  </form>
+                  <form action={deleteMember} className="inline">
+                    <DeleteBtn id={member.id} />
+                  </form>
+                </div>
+              </Modal>
             </th>
           </tr>
         ))}
@@ -269,16 +363,48 @@ export function PendingTableSection({
             <td>{member.cargo}</td>
             <td>{member.matricula}</td>
             <th>
-              <ModalPendingDetails
-                id={member.id}
-                name={member.name}
-                matricula={member.matricula}
-                curso={member.curso}
-                email={member.email}
-                status={member.status}
-                telefone={member.telefone}
-                cargo={member.cargo}
-              />
+              <Modal name="pendingDetails" trigger={<UserCog />}>
+                <div>
+                  <h2 className="block text-lg font-bold mb-2">
+                    {member.name}
+                  </h2>
+                  <p className="block text-white mb-2">
+                    <span className="text-gray-400">Status: </span>
+                    {member.status}
+                  </p>
+                  <p className="block text-white mb-2">
+                    <span className="text-gray-400">Id: </span>
+                    {member.id}
+                  </p>
+                  <p className="block text-white mb-2">
+                    <span className="text-gray-400">Cargo: </span>
+                    {member.cargo}
+                  </p>
+                  <p className="block text-white mb-2">
+                    <span className="text-gray-400">Matricula: </span>
+                    {member.matricula}
+                  </p>
+                  <p className="block text-white mb-2">
+                    <span className="text-gray-400">Curso: </span>
+                    {member.curso}
+                  </p>
+                  <p className="block text-white mb-2">
+                    <span className="text-gray-400">Email: </span>
+                    {member.email}
+                  </p>
+                  <p className="block text-white mb-2">
+                    <span className="text-gray-400">Telefone: </span>
+                    {member.telefone}
+                  </p>
+                  <EditBtn id={member.id} />
+                  <form action={activeMember} className="inline">
+                    <ActiveBtn id={member.id} />
+                  </form>
+                  <form action={arquiveMember} className="inline">
+                    <ArquiveBtn id={member.id} />
+                  </form>
+                </div>
+              </Modal>
             </th>
           </tr>
         ))}

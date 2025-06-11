@@ -1,4 +1,9 @@
-import { IformInput, IformBtn } from "@/interfaces";
+"use client";
+
+import { updateMember } from "@/app/actions";
+import { IformInput, IformBtn, Imember } from "@/interfaces";
+import { ActionResponse } from "@/types";
+import { useActionState } from "react";
 
 export function Input({
   label,
@@ -6,6 +11,7 @@ export function Input({
   className = "",
   placeholder,
   errors,
+  defaultValue,
   ...rest
 }: IformInput) {
   return (
@@ -17,6 +23,7 @@ export function Input({
         type="text"
         id={id}
         name={id}
+        defaultValue={defaultValue}
         className={className + " input mt-2 w-full"}
         placeholder={placeholder}
         // required
@@ -50,5 +57,77 @@ export function Button(props: IformBtn) {
     <button className={props.className + " btn btn-outline"}>
       {props.children}
     </button>
+  );
+}
+
+const initialState = {
+  success: false,
+  message: "",
+  errors: {},
+};
+
+export function EditarUsuário({ member }: { member: Imember }) {
+  const [state, action, isPending] = useActionState<ActionResponse, FormData>(
+    updateMember,
+    initialState
+  );
+  return (
+    <div className="h-[80vh] flex items-center justify-center">
+      <form
+        action={action}
+        className="overflow-auto max-h-full max-w-sm lg:min-w-200 mt-5 mx-auto border-base-300 rounded-box w-xs border shadow-2xl p-4"
+      >
+        <h1>Completar cadastro</h1>
+        <input type="hidden" name="id" value={member.id} />
+        <Input
+          label="Nome completo"
+          id="name"
+          defaultValue={member.name}
+          placeholder="Exemplo: fulano da silva souza"
+          errors={state.errors?.name?.[0]}
+        />
+
+        <Input
+          label="Cargo"
+          id="cargo"
+          defaultValue={member.cargo}
+          placeholder="Exemplo:"
+          errors={state.errors?.name?.[0]}
+        />
+
+        <Input
+          label="Matricula"
+          id="matricula"
+          defaultValue={member.matricula}
+          placeholder="Exemplo: 202511120025"
+          errors={state.errors?.matricula?.[0]}
+        />
+
+        <Input
+          label="Curso"
+          id="curso"
+          defaultValue={member.curso}
+          placeholder="Exemplo: Ciências biológicas"
+          errors={state.errors?.curso?.[0]}
+        />
+        <Input
+          label="Telefone"
+          id="telefone"
+          defaultValue={member.telefone}
+          placeholder="Exemplo: (DDD) 9999-9999"
+          errors={state.errors?.telefone?.[0]}
+        />
+        <Input
+          label="Email"
+          id="email"
+          defaultValue={member.email}
+          placeholder="Exemplo: fulanodasilva@gmail.com"
+          errors={state.errors?.email?.[0]}
+        />
+        <Button className="w-full" disabled={isPending}>
+          {isPending ? "Enviando..." : "Enviar"}
+        </Button>
+      </form>
+    </div>
   );
 }

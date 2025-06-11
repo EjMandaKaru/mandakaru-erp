@@ -1,14 +1,7 @@
 "use client";
 
-import {
-  activeMember,
-  addMemberToQueue,
-  arquiveMember,
-  deleteMember,
-  pendingMember,
-} from "@/app/actions";
-import { Imember } from "@/interfaces";
-import { UserCog, UserPen, UserPlus, UserX, X } from "lucide-react";
+import { UserPen, UserX, X } from "lucide-react";
+import Link from "next/link";
 import { ReactNode } from "react";
 import { z } from "zod";
 export const signUpFormSchema = z.object({
@@ -17,27 +10,22 @@ export const signUpFormSchema = z.object({
 
 export interface Imodal {
   name: string;
+  trigger: ReactNode;
   children: ReactNode;
   className?: string;
 }
 
-export function ModalBtn(props: Imodal) {
-  return (
-    <div>
-      <label htmlFor={props.name}>
-        <span className="btn btn-ghost text-2xl">{props.children}</span>
-      </label>
-    </div>
-  );
-}
+export type ImodalBtn = {
+  id: string | undefined;
+  className?: string;
+};
 
 export function Modal(props: Imodal) {
   return (
     <div>
-      {props.children}
-      <ModalBtn name={props.name}>
-        <UserPlus />
-      </ModalBtn>
+      <label htmlFor={props.name} className="cursor-pointer">
+        <span className="btn btn-ghost text-2xl">{props.trigger}</span>
+      </label>
       <input type="checkbox" id={props.name} className="modal-toggle" />
       <div className="modal" role="dialog">
         <div className="modal-box">
@@ -47,274 +35,73 @@ export function Modal(props: Imodal) {
           >
             <X />
           </label>
+          {props.children}
         </div>
       </div>
     </div>
   );
 }
 
-export function AddMemberModal() {
+export function EditBtn(props: ImodalBtn) {
   return (
-    <div>
-      <label htmlFor="my_modal">
-        <span className="btn btn-ghost text-2xl">
-          <UserPlus />
-        </span>
-      </label>
-      <input type="checkbox" id="my_modal" className="modal-toggle" />
-      <div className="modal" role="dialog">
-        <div className="modal-box">
-          <label
-            htmlFor="my_modal"
-            className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-          >
-            <X />
-          </label>
-          <form action={addMemberToQueue}>
-            <label htmlFor="matricula" className="block text-lg font-bold mb-2">
-              Adicionar membro
-            </label>
-
-            <input
-              type="text"
-              id="matricula"
-              name="matricula"
-              placeholder="Matícula"
-              className="input m-2"
-              required
-            />
-            <button type="submit" className="btn btn-success text-2x m-2">
-              Enviar
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
+    <Link
+      href={`/dashboard/membros/editar/${props.id}`}
+      className="btn btn-success text-2x mt-2 mr-2"
+    >
+      <UserPen />
+      Editar
+    </Link>
   );
 }
 
-export function ModalDetails(props: Imember) {
+export function ActiveBtn(props: ImodalBtn) {
   return (
-    <div>
-      <label htmlFor="modal_details">
-        <span className="btn btn-ghost">
-          <UserCog />
-        </span>
-      </label>
-      <input type="checkbox" id="modal_details" className="modal-toggle" />
-      <div className="modal" role="dialog">
-        <div className="modal-box">
-          <div className="controls ">
-            <label
-              htmlFor="modal_details"
-              className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-            >
-              <X />
-            </label>
-          </div>
-          <div>
-            <h2 className="block text-lg font-bold mb-2">{props.name}</h2>
-            <p className="block text-white mb-2">
-              <span className="text-gray-400">Status: </span>
-              {props.status}
-            </p>
-            <p className="block text-white mb-2">
-              <span className="text-gray-400">Id: </span>
-              {props.id}
-            </p>
-            <p className="block text-white mb-2">
-              <span className="text-gray-400">Cargo: </span>
-              {props.cargo}
-            </p>
-            <p className="block text-white mb-2">
-              <span className="text-gray-400">Matricula: </span>
-              {props.matricula}
-            </p>
-            <p className="block text-white mb-2">
-              <span className="text-gray-400">Curso: </span>
-              {props.curso}
-            </p>
-            <p className="block text-white mb-2">
-              <span className="text-gray-400">Email: </span>
-              {props.email}
-            </p>
-            <p className="block text-white mb-2">
-              <span className="text-gray-400">Telefone: </span>
-              {props.telefone}
-            </p>
-            <button className="btn btn-success text-2x mt-2 mr-2">
-              <UserPen />
-              Editar
-            </button>
-            <form action={arquiveMember} className="inline">
-              <button
-                value={props.id}
-                name="memberID"
-                className="btn btn-success text-2x mt-2"
-              >
-                <UserPen />
-                Arquivar
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
+    <button
+      value={props.id}
+      name="memberID"
+      className="btn btn-success text-2x mt-2 mr-2"
+    >
+      <UserPen />
+      Efetivar
+    </button>
   );
 }
 
-export function ModalPendingDetails(props: Imember) {
+export function RemoveBtn(props: ImodalBtn) {
   return (
-    <div>
-      <label htmlFor="modal_details">
-        <span className="btn btn-ghost">
-          <UserCog />
-        </span>
-      </label>
-      <input type="checkbox" id="modal_details" className="modal-toggle" />
-      <div className="modal" role="dialog">
-        <div className="modal-box">
-          <div className="controls ">
-            <label
-              htmlFor="modal_details"
-              className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-            >
-              <X />
-            </label>
-          </div>
-          <div>
-            <h2 className="block text-lg font-bold mb-2">{props.name}</h2>
-            <p className="block text-white mb-2">
-              <span className="text-gray-400">Status: </span>
-              {props.status}
-            </p>
-            <p className="block text-white mb-2">
-              <span className="text-gray-400">Id: </span>
-              {props.id}
-            </p>
-            <p className="block text-white mb-2">
-              <span className="text-gray-400">Cargo: </span>
-              {props.cargo}
-            </p>
-            <p className="block text-white mb-2">
-              <span className="text-gray-400">Matricula: </span>
-              {props.matricula}
-            </p>
-            <p className="block text-white mb-2">
-              <span className="text-gray-400">Curso: </span>
-              {props.curso}
-            </p>
-            <p className="block text-white mb-2">
-              <span className="text-gray-400">Email: </span>
-              {props.email}
-            </p>
-            <p className="block text-white mb-2">
-              <span className="text-gray-400">Telefone: </span>
-              {props.telefone}
-            </p>
-            <button className="btn btn-success text-2x mt-2 mr-2">
-              <UserPen />
-              Editar
-            </button>
-            <form action={activeMember} className="inline">
-              <button
-                value={props.id}
-                name="memberID"
-                className="btn btn-success text-2x mt-2 mr-2"
-              >
-                <UserPen />
-                Efetivar
-              </button>
-            </form>
-            <form action={arquiveMember} className="inline">
-              <button
-                value={props.id}
-                name="memberID"
-                className="btn btn-success text-2x mt-2"
-              >
-                <UserPen />
-                Arquivar
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
+    <button
+      value={props.id}
+      name="memberID"
+      className="btn btn-success text-2x mt-2 mr-2"
+    >
+      <UserPen />
+      Remover
+    </button>
   );
 }
 
-export function ModalArquivedDetails(props: Imember) {
+export function ArquiveBtn(props: ImodalBtn) {
   return (
-    <div>
-      <label htmlFor="modal_details">
-        <span className="btn btn-ghost">
-          <UserCog />
-        </span>
-      </label>
-      <input type="checkbox" id="modal_details" className="modal-toggle" />
-      <div className="modal" role="dialog">
-        <div className="modal-box">
-          <div className="controls ">
-            <label
-              htmlFor="modal_details"
-              className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-            >
-              <X />
-            </label>
-          </div>
-          <div>
-            <h2 className="block text-lg font-bold mb-2">{props.name}</h2>
-            <p className="block text-white mb-2">
-              <span className="text-gray-400">Status: </span>
-              {props.status}
-            </p>
-            <p className="block text-white mb-2">
-              <span className="text-gray-400">Id: </span>
-              {props.id}
-            </p>
-            <p className="block text-white mb-2">
-              <span className="text-gray-400">Cargo: </span>
-              {props.cargo}
-            </p>
-            <p className="block text-white mb-2">
-              <span className="text-gray-400">Matricula: </span>
-              {props.matricula}
-            </p>
-            <p className="block text-white mb-2">
-              <span className="text-gray-400">Curso: </span>
-              {props.curso}
-            </p>
-            <p className="block text-white mb-2">
-              <span className="text-gray-400">Email: </span>
-              {props.email}
-            </p>
-            <p className="block text-white mb-2">
-              <span className="text-gray-400">Telefone: </span>
-              {props.telefone}
-            </p>
-            <form action={pendingMember} className="inline">
-              <button
-                value={props.id}
-                name="memberID"
-                className="btn btn-success text-2x mt-2 mr-2"
-              >
-                <UserPen />
-                Remover
-              </button>
-            </form>
-            <form action={deleteMember} className="inline">
-              <button
-                value={props.id}
-                name="memberID"
-                className="btn btn-error text-2x mt-2"
-              >
-                <UserX />
-                Deletar
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
+    <button
+      value={props.id}
+      name="memberID"
+      className="btn btn-success text-2x mt-2"
+    >
+      <UserPen />
+      Arquivar
+    </button>
+  );
+}
+
+export function DeleteBtn(props: ImodalBtn) {
+  return (
+    <button
+      value={props.id}
+      name="memberID"
+      className="btn btn-error text-2x mt-2"
+    >
+      <UserX />
+      Deletar
+    </button>
   );
 }
