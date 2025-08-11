@@ -9,6 +9,7 @@ export type Member = {
   telefone?: string;
   email?: string;
   status?: string;
+  reason?: string | null;
 };
 
 export interface ActionResponse {

@@ -45,7 +45,7 @@ export function Modal(props: Imodal) {
 export function EditBtn(props: ImodalBtn) {
   return (
     <Link
-      href={`/dashboard/membros/editar/${props.id}`}
+      href={`/trabalho/membros/editar/${props.id}`}
       className="btn btn-success text-2x mt-2 mr-2"
     >
       <UserPen />
@@ -79,17 +79,27 @@ export function RemoveBtn(props: ImodalBtn) {
     </button>
   );
 }
-
+// export function ArquiveBtn(props: ImodalBtn) {
+//   return (
+//     <button
+//       value={props.id}
+//       name="memberID"
+//       className="btn btn-success text-2x mt-2"
+//     >
+//       <UserPen />
+//       Arquivar
+//     </button>
+//   );
+// }
 export function ArquiveBtn(props: ImodalBtn) {
   return (
-    <button
-      value={props.id}
-      name="memberID"
-      className="btn btn-success text-2x mt-2"
+    <Link
+      href={`/trabalho/membros/desligar/${props.id}`}
+      className="btn btn-success text-2x mt-2 mr-2"
     >
       <UserPen />
-      Arquivar
-    </button>
+      Desligar
+    </Link>
   );
 }
 

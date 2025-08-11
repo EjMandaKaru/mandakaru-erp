@@ -20,3 +20,12 @@ export const listaDeEspera = pgTable("listaDeEspera", {
   matricula: varchar({ length: 255 }).notNull().unique(),
   status: varchar({ length: 255 }).notNull(),
 });
+
+export const desligamentos = pgTable("desligamentos", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  matricula: varchar({ length: 255 }).notNull().unique(),
+  name: varchar({ length: 255 }).notNull(),
+  reason: varchar({ length: 255 }).notNull(),
+});

@@ -53,10 +53,10 @@ export function Navbar() {
             </h1>
           </DropdownBtn>
           <NavList className="border border-base-300">
-            <NavLink href="/">Homepage</NavLink>
-            <NavLink href="/dashboard">Dashboard</NavLink>
+            <NavLink href="/">Página principal</NavLink>
+            <NavLink href="/trabalho">Área de trabalho</NavLink>
             <NavLink href="/registrar">Cadastro</NavLink>
-            <NavLink href="/about">About</NavLink>
+            {/* <NavLink href="/sobre">Sobre</NavLink> */}
           </NavList>
         </div>
       </div>

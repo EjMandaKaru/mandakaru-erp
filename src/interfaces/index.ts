@@ -10,6 +10,7 @@ export interface Imember extends Member {
   telefone: string;
   email: string;
   status: string;
+  reason?: string | null;
 }
 
 export interface ImemberList {

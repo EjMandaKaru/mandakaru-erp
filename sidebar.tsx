@@ -7,12 +7,11 @@ import {
   FileCheck,
   FileX,
   ChevronDown,
-  Menu,
   LayoutDashboard,
+  Menu,
 } from "lucide-react";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import React from "react";
 
 interface SidebarItemProps {
   href: string;
@@ -41,6 +40,8 @@ function SidebarItem({ href, icon, children }: SidebarItemProps) {
 
 export function Sidebar() {
   const [open, setOpen] = useState(false);
+  const [showCadastros, setShowCadastros] = useState(false);
+
   return (
     <>
       {/* Mobile button */}
@@ -62,59 +63,65 @@ export function Sidebar() {
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
             className="fixed inset-y-0 left-0 w-64 bg-base-100 border-r border-base-300 z-50 p-4 md:hidden"
           >
-            <SidebarContent />
+            <SidebarContent
+              showCadastros={showCadastros}
+              toggleCadastros={() => setShowCadastros(!showCadastros)}
+            />
           </motion.aside>
         )}
       </AnimatePresence>
 
       {/* Desktop Sidebar */}
       <aside className="hidden md:flex w-64 h-screen bg-base-100 border-r border-base-300 flex-col z-50">
-        <SidebarContent />
+        <SidebarContent
+          showCadastros={showCadastros}
+          toggleCadastros={() => setShowCadastros(!showCadastros)}
+        />
       </aside>
     </>
   );
 }
 
-function SidebarContent() {
-  const [openMenus, setOpenMenus] = React.useState<{ [key: string]: boolean }>({
-    gestao: false,
-    financeiro: false,
-    marketing: false,
-  });
-
-  function toggleMenu(menu: string) {
-    setOpenMenus((prev) => ({
-      ...prev,
-      [menu]: !prev[menu],
-    }));
-  }
-
+function SidebarContent({
+  showCadastros,
+  toggleCadastros,
+}: {
+  showCadastros: boolean;
+  toggleCadastros: () => void;
+}) {
   return (
-    <div className="h-screen overflow-y-scroll">
-      <div className="px-4 py-6 text-l font-bold flex items-center gap-2">
-        📋 Área de trabalho
+    <>
+      <div className="px-4 py-6 text-xl font-bold flex items-center gap-2">
+        📋 FormBox
       </div>
       <ul className="menu p-2 text-base-content gap-1">
-        <SidebarItem href="/trabalho" icon={<LayoutDashboard size={18} />}>
-          Início
+        <SidebarItem href="/dashboard" icon={<LayoutDashboard size={18} />}>
+          Dashboard
         </SidebarItem>
+        <SidebarItem
+          href="/dashboard/forms"
+          icon={<LayoutDashboard size={18} />}
+        >
+          Formulários
+        </SidebarItem>
+
         <li>
           <button
             className="flex items-center justify-between px-4 py-2 rounded-lg hover:bg-base-200 w-full"
-            onClick={() => toggleMenu("gestao")}
+            onClick={toggleCadastros}
           >
             <span className="flex items-center gap-3">
-              <FileClock size={18} /> Gestão
+              <FileClock size={18} /> Submissões
             </span>
             <ChevronDown
               size={16}
               className={`transition-transform ${
-                openMenus.gestao ? "rotate-180" : "rotate-0"
+                showCadastros ? "rotate-180" : "rotate-0"
               }`}
             />
           </button>
           <AnimatePresence initial={false}>
-            {openMenus.gestao && (
+            {showCadastros && (
               <motion.ul
                 initial="collapsed"
                 animate="open"
@@ -127,40 +134,34 @@ function SidebarContent() {
                 className="pl-6 overflow-hidden"
               >
                 <SidebarItem
-                  href="/trabalho/membros"
+                  href="/dashboard/cadastros/pendentes"
                   icon={<FileClock size={16} />}
                 >
-                  Membros
+                  Pendentes
                 </SidebarItem>
                 <SidebarItem
-                  href="/trabalho/projetos"
+                  href="/dashboard/cadastros/aprovados"
                   icon={<FileCheck size={16} />}
                 >
-                  Projetos
+                  Aprovados
                 </SidebarItem>
-                {/* <SidebarItem
-                  href="/trabalho/eventos"
-                  icon={<FileX size={16} />}
-                >
-                  Eventos
-                </SidebarItem> */}
                 <SidebarItem
-                  href="/trabalho/relatorios"
+                  href="/dashboard/cadastros/reprovados"
                   icon={<FileX size={16} />}
                 >
-                  Gestão de Membros
+                  Reprovados
                 </SidebarItem>
               </motion.ul>
             )}
           </AnimatePresence>
         </li>
         <SidebarItem
-          href="/trabalho/financeiro"
+          href="/dashboard/configs"
           icon={<LayoutDashboard size={18} />}
         >
-          Financeiro
+          Configurações
         </SidebarItem>
       </ul>
-    </div>
+    </>
   );
 }
