@@ -95,9 +95,9 @@ function SidebarContent() {
         📋 Área de trabalho
       </div>
       <ul className="menu p-2 text-base-content gap-1">
-        <SidebarItem href="/trabalho" icon={<LayoutDashboard size={18} />}>
+        {/* <SidebarItem href="/trabalho" icon={<LayoutDashboard size={18} />}>
           Início
-        </SidebarItem>
+        </SidebarItem> */}
         <li>
           <button
             className="flex items-center justify-between px-4 py-2 rounded-lg hover:bg-base-200 w-full"
